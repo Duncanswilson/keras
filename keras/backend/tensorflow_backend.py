@@ -2927,6 +2927,32 @@ def relu(x, alpha=0., max_value=None):
     return x
 
 
+def leaky_relu(x, alpha=0.3, max_value=None):
+    """
+    Leaky version of a Rectified Linear Unit.
+    It allows a small gradient when the unit is not active:
+    `f(x) = alpha * x for x < 0`,
+    `f(x) = x for x >= 0`.
+
+    # Arguments
+        x: A tensor or variable.
+        alpha: float >= 0. Negative slope coefficient.
+        max_value: Saturation threshold.
+
+    # Returns
+        A tensor.
+
+    # References
+        - [Rectifier Nonlinearities Improve Neural Network Acoustic Models](https://web.stanford.edu/~awni/papers/relu_hybrid_icml2013_final.pdf)
+    """
+    x = tf.nn.leaky_relu(x, alpha)
+    if max_value is not None:
+        max_value = _to_tensor(max_value, x.dtype.base_dtype)
+        zero = _to_tensor(0., x.dtype.base_dtype)
+        x = tf.clip_by_value(x, zero, max_value)
+    return x
+
+
 def elu(x, alpha=1.):
     """Exponential linear unit.
 

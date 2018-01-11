@@ -1550,6 +1550,12 @@ def relu(x, alpha=0., max_value=None):
         x = T.minimum(x, max_value)
     return x
 
+def leaky_relu(x, alpha=0.3, max_value=None):
+    _assert_has_capability(T.nnet, 'relu')
+    x = T.nnet.relu(x, alpha)
+    if max_value is not None:
+        x = T.minimum(x, max_value)
+    return x
 
 def softmax(x):
     return T.nnet.softmax(x)
